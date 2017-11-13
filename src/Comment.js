@@ -1,15 +1,62 @@
-import React,{Component} from 'react' //TODO: why {Component}
+import React, { Component } from 'react' //TODO: why {Component}
+import PropTypes from 'prop-types'
+class Comment extends Component {
+    static propTypes = {
+        comment: PropTypes.object.isRequired,
+        onDeleteComment: PropTypes.func,
+        index: PropTypes.number
+    }
 
-class Comment extends Component{
-    render(){
+    constructor() {
+        super()
+        this.state = { timeString: '' }
+    }
+
+    componentWillMount() {
+        this._updateTimeString()
+        this._timer = setInterval(
+            this._updateTimeString.bind(this),
+            5000
+        )
+    }
+
+    componentWillUnmount() {
+        clearInterval(this._timer)
+    }
+
+    _updateTimeString() {
+        const comment = this.props.comment
+        const duration = (+Date.now() - comment.createdTime) / 1000
+        this.setState({
+            timeString: duration > 60
+                ? ` ${Math.round(duration / 60)} Mintutes before`
+                : ` ${Math.round(Math.max(duration, 1))} Seconds before`
+        })
+    }
+
+    handleDeleteComment() {
+        if (this.props.onDeleteComment) {
+            this.props.onDeleteComment(this.props.index)
+        }
+    }
+
+    render() {
+        const { comment } = this.props.comment
+        //const { comment } = this.props or this.props.comment both ok
         return (
             <div className='comment'>
                 <div className='comment-user'>
                     <span>
-                        {this.props.comment.username} 
+                        {this.props.comment.username}
                     </span>：
                 </div>
                 <p> {this.props.comment.content}</p>
+                <span className='comment-createdtime'>
+                    {this.state.timeString}
+                </span>
+                <span onClick={this.handleDeleteComment.bind(this)} className='comment-delete'>
+                    delete
+                </span>
             </div>
         )
     }

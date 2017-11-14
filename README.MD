@@ -1,4 +1,4 @@
-## Table of Contents
+## READ ME
 
 -- comment-app using ReactJS
 	cd comment-app

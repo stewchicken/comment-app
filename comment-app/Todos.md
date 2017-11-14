@@ -14,7 +14,7 @@ split action, reducer , store into different directories
 
 tagging 
 git tag -a v1.0 -m "reactjs without redux version"
-
+git push  --tags 
 
 connect reactjs with redux
 using provider from react-redux
